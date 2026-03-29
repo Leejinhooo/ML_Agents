@@ -1,0 +1,33 @@
+﻿behaviors:
+  RollerBall: # Unity Agent의 Behavior Name과 동일해야 하는 학습 설정 이름
+    trainer_type: ppo # 사용할 강화학습 알고리즘 (ppo / sac / poca)
+    
+    
+    hyperparameters: # PPO 학습에 사용되는 하이퍼파라미터 그룹
+      batch_size: 10 # 한 번의 gradient update에서 사용하는 experience 샘플 수
+      buffer_size: 100 # 정책 업데이트 전에 수집하는 전체 experience 개수
+      learning_rate: 3.0e-4 # 신경망 weight를 업데이트할 때 사용하는 학습률
+      beta: 5.0e-4 # entropy regularization 계수로 탐험(exploration)을 증가시킴
+      epsilon: 0.2 # PPO clipping 값으로 정책이 급격히 변하는 것을 제한
+      lambd: 0.99 # GAE(Generalized Advantage Estimation) 파라미터
+      num_epoch: 3 # buffer 데이터를 몇 번 반복 학습할지 결정
+      learning_rate_schedule: linear # 학습률 감소 방식 (linear는 학습이 진행되며 감소)
+      beta_schedule: constant # entropy 계수 변화 방식
+      epsilon_schedule: linear # PPO clipping 값 감소 방식
+    
+    
+    network_settings: # 정책 신경망 구조 설정
+      normalize: false # observation 입력값을 정규화할지 여부
+      hidden_units: 128 # hidden layer의 neuron 수
+      num_layers: 2 # hidden layer의 개수
+    
+    
+    reward_signals: # 학습에 사용하는 reward 종류 정의
+      extrinsic: # 환경에서 직접 제공하는 기본 reward
+        gamma: 0.99 # discount factor로 미래 reward의 중요도를 조절
+        strength: 1.0 # reward signal의 가중치
+    
+    
+    max_steps: 50000 # 전체 training step 수로 이 값에 도달하면 학습 종료
+    time_horizon: 64 # experience buffer에 저장하기 전 수집하는 step 길이
+    summary_freq: 10000 # TensorBoard에 학습 통계를 기록하는 step 간격
